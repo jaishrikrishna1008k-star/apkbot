@@ -5,9 +5,24 @@ import os
 import re
 import shutil
 
-TOKEN = "8866550012:AAEBxel9mb2f3S6UMTAfKveUh2BZYhlvBjg"
+TOKEN = "8866550012:AAEJ09ND5FX6AMAUxER678q1FHbEGs2lhh0"
+ADMIN_ID = 8616765325
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user = update.effective_user
+
+    try:
+        await context.bot.send_message(
+            chat_id=ADMIN_ID,
+            text=f"🚀 New User Started Bot\n\n"
+                 f"👤 Name: {user.first_name}\n"
+                 f"🆔 ID: {user.id}\n"
+                 f"📛 Username: @{user.username if user.username else 'None'}"
+        )
+    except:
+        pass
+
     await update.message.reply_text(
         "🗂️Please send apk."
     )
@@ -37,6 +52,7 @@ async def apk(update: Update, context: ContextTypes.DEFAULT_TYPE):
     extract_dir = "scan"
 
     try:
+
         if os.path.exists(extract_dir):
             shutil.rmtree(extract_dir)
 
@@ -48,11 +64,13 @@ async def apk(update: Update, context: ContextTypes.DEFAULT_TYPE):
         firebase_links = []
 
         for root, dirs, files in os.walk(extract_dir):
+
             for f in files:
 
                 path = os.path.join(root, f)
 
                 try:
+
                     with open(path, "rb") as fp:
                         content = fp.read().decode(errors="ignore")
 
@@ -81,17 +99,21 @@ async def apk(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(result)
 
         else:
+
             await update.message.reply_text(
                 "❌ Firebase link nahi mila."
             )
 
     except Exception as e:
+
         await update.message.reply_text(
             f"⚠️ Error:\n{e}"
         )
 
     finally:
+
         try:
+
             if os.path.exists(extract_dir):
                 shutil.rmtree(extract_dir)
 
@@ -117,4 +139,3 @@ app.add_handler(
 print("Bot Running...")
 
 app.run_polling()
-
